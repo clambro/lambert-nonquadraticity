@@ -45,18 +45,18 @@ For integer bases, $M(q)=q$ and $2\lambda<1$, giving the headline result. The sa
 
 For an indeterminate base $U$, define a linear functional by
 
-$$
+```math
 \mu_X(t^r)=\frac1{U^{r+1}-1},\qquad
-\mu_X\!\left(\frac1{U^j-t}\right)
+\mu_X\left(\frac1{U^j-t}\right)
 =X-\sum_{v=1}^{j}\frac1{U^v-1}.
-$$
+```
 
 Partial fractions extend it to the rational functions used below. Take $h=60N$, $k=3N$, and form
 
-$$
+```math
 \Delta_{h,k}(U,X)=\det_{0\leq i,j<h}
-\mu_X\!\left(\frac{t^{k+i+j}}{\prod_{v=k}^{k+h-1}(U^v-t)}\right).
-$$
+\mu_X\left(\frac{t^{k+i+j}}{\prod_{v=k}^{k+h-1}(U^v-t)}\right).
+```
 
 At $(U,X)=(q,F(q))$, the functional is integration against the positive measure $\sum_{v\geq1}q^{-v}\delta_{q^{-v}}$. The determinant is therefore a Gram determinant for $1,t,\ldots,t^{h-1}$ with strictly positive weight and infinite support. This proves strict positivity, which will prevent the eventual algebraic norm from vanishing.
 
