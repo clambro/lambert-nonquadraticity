@@ -54,7 +54,7 @@ For an indeterminate base $U$, define a linear functional by
 Partial fractions extend it to the rational functions used below. Take $h=60N$, $k=3N$, and form
 
 ```math
-\Delta_{h,k}(U,X)=\det_{0\leq i,j<h}
+\Delta_{h,k}(U,X)=\det_{0\leq i,j\lt h}
 \mu_X\left(\frac{t^{k+i+j}}{\prod_{v=k}^{k+h-1}(U^v-t)}\right).
 ```
 
