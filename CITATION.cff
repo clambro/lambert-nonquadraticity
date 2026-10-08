@@ -1,0 +1,14 @@
+cff-version: 1.2.0
+message: "Please cite the manuscript described in preferred-citation."
+title: "Nonquadraticity of Lambert Series Values: Manuscript and Lean Formalization"
+type: software
+authors:
+  - family-names: Lambrinoudis
+    given-names: Costa
+preferred-citation:
+  type: article
+  title: "Nonquadraticity of Lambert Series Values"
+  authors:
+    - family-names: Lambrinoudis
+      given-names: Costa
+  year: 2026

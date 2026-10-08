@@ -1,0 +1,616 @@
+\documentclass[12pt]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage[letterpaper,margin=1in]{geometry}
+\usepackage{amssymb,amsthm,mathtools}
+\usepackage{titlesec}
+\usepackage[hidelinks]{hyperref}
+
+\hypersetup{
+  pdftitle={Nonquadraticity of Lambert Series Values},
+  pdfsubject={Degree exclusion for rational and algebraic Lambert bases},
+  pdfauthor={Costa Lambrinoudis}
+}
+
+\allowdisplaybreaks
+\linespread{1.02}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.2\baselineskip}
+\setlength{\skip\footins}{1.25\baselineskip}
+\emergencystretch=2em
+\titleformat{\section}{\raggedright\normalfont\Large\bfseries}{\thesection}{1em}{}
+\titlespacing*{\section}{0pt}{3.5ex plus 1ex minus 0.2ex}{2.3ex plus 0.2ex}
+\titleformat{\subsection}{\raggedright\normalfont\large\bfseries}{\thesubsection}{1em}{}
+\titlespacing*{\subsection}{0pt}{3.25ex plus 1ex minus 0.2ex}{1.5ex plus 0.2ex}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{proposition}[theorem]{Proposition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\C}{\mathbb C}
+\newcommand{\R}{\mathbb R}
+\newcommand{\pos}[1]{\left(#1\right)_+}
+\DeclareMathOperator{\Res}{Res}
+\DeclareMathOperator{\ord}{ord}
+\begin{document}
+\begin{center}
+{\LARGE Nonquadraticity of Lambert Series Values}\\[1.5ex]
+{\large Costa Lambrinoudis {\normalsize(with AI)}}\footnote{\textit{AI disclosure:} Generative AI was used extensively in the mathematical investigation, proof development, literature review, exposition, and Lean formalization, under the author's direction and review.}\\[0.5ex]
+{7 October 2026}
+\end{center}
+
+\begin{quote}\small
+For every integer $q\geq2$, the Lambert value
+$F(q)=\sum_{n\geq1}(q^n-1)^{-1}$ satisfies no nonzero polynomial of degree at
+most two over $\Q$. In particular, the Erd\H{o}s--Borwein constant $F(2)$ is
+neither rational nor quadratic irrational. More generally, for real algebraic
+$q>1$, we exclude every nonzero polynomial relation of degree at most $e$ over
+$\Q(q)$ whenever $e\lambda\log M(q)<\log q$, where $M(q)$ is the Mahler measure
+of the base and $\lambda=(42963+428220/\pi^2)/202140$.
+This gives nonquadraticity over $\Q(q)$ for Pisot and Salem bases,
+$F(\sqrt m)\notin\Q(\sqrt m)$ for every integer $m\geq2$, and irrationality
+for rational bases $q=a/b>1$ with $\log b/\log a<0.5728$.
+The proof combines positive moment determinants, local denominator bounds,
+and the product formula.
+\end{quote}
+
+\section{Introduction}
+
+The Lambert series
+\[
+F(q)=\sum_{n=1}^{\infty}\frac1{q^n-1},\qquad q>1,
+\]
+converges absolutely. Erd\H{o}s proved that $F(q)$ is irrational at every integer
+base $q\geq2$ in 1948~\cite{erdos1948}. We prove nonquadraticity at every
+integer base, including the Erd\H{o}s--Borwein constant $F(2)$.
+
+\begin{theorem}[Integer bases]\label{thm:integer}
+For every integer $q\geq2$, the numbers $1,F(q),F(q)^2$ are linearly
+independent over $\Q$.
+\end{theorem}
+
+We obtain this result from a criterion over $\Q(q)$ for arbitrary real
+algebraic bases $q>1$. The criterion compares the degree of a proposed relation
+with $\log q/\log M(q)$, where $M(q)$ is the Mahler measure of the base.
+It also applies to Pisot, Salem, and radical bases.
+
+For rational bases $q=a/b>1$, the same theorem improves the known bounds for
+Erd\H{o}s Problem 1049,\footnote{\url{https://www.erdosproblems.com/1049}.}
+enlarging the irrationality region from $\log b/\log a<0.405683\ldots$ to
+$\log b/\log a<0.5728$. See Erd\H{o}s~\cite[p.~102]{erdos} for the problem.
+The earlier bound of
+Bundschuh--V\"a\"an\"anen~\cite[Theorem~2]{bundschuh-vaananen} was
+$1/2-1/\pi^2=0.398678\ldots$; Cook's 2026 refinement of Zudilin's
+permutation method~\cite{cook,zudilin} gives the former threshold.
+
+Positive moment determinants provide nonvanishing and decay at the distinguished
+real embedding. Local denominator bounds produce integral polynomials, while
+uniform complex estimates control their values at the other conjugates.
+The product formula then excludes algebraic relations of low degree.
+The method belongs to the same family as Fauzan's 2026 preprint on
+$\zeta(5)$~\cite{fauzan}: positive moment determinants with local denominator
+control, with cyclotomic arithmetic as the $q$-specific ingredient here.
+
+\subsection{The general degree criterion}
+
+For a real algebraic number $q$, put $K=\Q(q)$ and let
+\[
+M(q)=|a_g|\prod_{j=1}^{g}\max(1,|q_j|)
+\]
+be the Mahler measure of its primitive irreducible integer polynomial
+$a_g\prod_j(X-q_j)$. Define
+\begin{equation}\label{eq:constants}
+C=42963+\frac{428220}{\pi^2},\qquad S=202140,\qquad
+\lambda=\frac CS=0.4271829289\ldots.
+\end{equation}
+
+\begin{theorem}\label{thm:algebraic}
+Let $q>1$ be real algebraic and $e\geq0$ an integer. If
+\begin{equation}\label{eq:algmargin}
+e\lambda\log M(q)<\log q,
+\end{equation}
+then $P(F(q))\ne0$ for every nonzero $P\in K[X]$ of degree at most $e$.
+\end{theorem}
+
+\begin{proof}[Proof of Theorem~\ref{thm:integer}]
+For an integer $q\geq2$, $K=\Q$ and $M(q)=q$. Since $2\lambda<1$,
+Theorem~\ref{thm:algebraic} applies with $e=2$.
+\end{proof}
+
+\begin{corollary}\label{cor:conjugates}
+If $q>1$ is an algebraic integer whose other conjugates have modulus at most one, then $1,F(q),F(q)^2$ are linearly independent over $\Q(q)$.
+\end{corollary}
+\begin{proof}
+Here $M(q)=q$, and $2C<S$. Apply Theorem~\ref{thm:algebraic} with $e=2$.
+\end{proof}
+In particular, this applies to every Pisot or Salem base.
+
+\begin{corollary}[Rational bases]\label{cor:rational}
+Let $a>b>0$ be integers and let $e\geq0$ be an integer. If
+\[
+\frac{\log b}{\log a}<1-e\lambda,
+\]
+then no nonzero polynomial in $\Q[X]$ of degree at most $e$ vanishes at $F(a/b)$.
+In particular, $F(a/b)$ is irrational whenever $\log b/\log a<0.5728$.
+\end{corollary}
+\begin{proof}
+For coprime $a,b$, $M(a/b)=a$, so the assertion follows from
+Theorem~\ref{thm:algebraic}. In general $M(a/b)\leq a$, which gives the same
+sufficient condition. Finally $1-\lambda=0.5728170710\ldots>0.5728$.
+\end{proof}
+
+\begin{corollary}\label{cor:radical}
+Suppose $q>1$ and $q^n=m$ for positive integers $n,m$. Put $g=[\Q(q):\Q]$.
+If $e\geq0$ is an integer and $eg\lambda<1$, no nonzero polynomial over $\Q(q)$ of degree at most $e$ vanishes at $F(q)$.
+In particular,
+\[
+F(\sqrt m)\notin\Q(\sqrt m)\qquad(m\in\Z,\ m\geq2).
+\]
+\end{corollary}
+\begin{proof}
+The number $q$ is integral and every conjugate has modulus $q$, since its $n$th power is $m$.
+Hence $\log M(q)=g\log q$. For the last assertion take $e=1$ and use $g\leq2$ and $2\lambda<1$.
+\end{proof}
+
+\section{Positive determinants and their normalization}\label{sec:determinants}
+
+For an indeterminate base $U$, define a linear functional by
+\begin{equation}\label{eq:functional}
+\mu_X(t^r)=\frac1{U^{r+1}-1},\qquad
+\mu_X\!\left(\frac1{U^j-t}\right)=X-S_j(U),\qquad
+S_j(U)=\sum_{v=1}^{j}\frac1{U^v-1}.
+\end{equation}
+Partial fractions extend it to rational functions with distinct poles among the powers of $U$.
+For integers $h\geq1$ and $k\geq0$, put
+\begin{equation}\label{eq:delta}
+B_{h,k}(t)=\prod_{j=k}^{k+h-1}(U^j-t),\qquad
+\Delta_{h,k}(U,X)=\det_{0\leq i,j<h}
+\mu_X\!\left(\frac{t^{k+i+j}}{B_{h,k}(t)}\right).
+\end{equation}
+Each entry is affine in $X$, so $\deg_X\Delta_{h,k}\leq h$.
+The parameter $k$ shifts both the poles and the moments.
+
+For $q>1$, let $d\nu_q=\sum_{v\geq1}q^{-v}\delta_{q^{-v}}$. Direct summation gives
+\[
+\int t^r\,d\nu_q(t)=\frac1{q^{r+1}-1},\qquad
+\int\frac{d\nu_q(t)}{q^j-t}=F(q)-S_j(q).
+\]
+On its support $0<t\leq q^{-1}$, every factor $q^j-t$ is positive, so the
+weight $t^k/B_{h,k}(t)$ is strictly positive. Evaluation of~\eqref{eq:delta} at
+$(q,F(q))$ is therefore the Gram determinant of $1,t,\ldots,t^{h-1}$ for a
+positive measure with infinite support. The matrix is positive definite.
+
+Define
+\begin{equation}\label{eq:normalization}
+G_{h,k}=k\left(hk+\frac{h(h-1)}2\right),\qquad
+Q_{h,k}(U,X)=U^{-G_{h,k}}\Delta_{h,k}(U,X).
+\end{equation}
+This normalization makes every coefficient bounded at infinity.
+
+\begin{proposition}\label{prop:analytic}
+For $q>1$,
+\begin{equation}\label{eq:decay}
+Q_{h,k}(q,F(q))>0,\qquad
+\log Q_{h,k}(q,F(q))=-\mathcal T_{h,k}\log q+O_q(h),
+\end{equation}
+where
+\begin{equation}\label{eq:T}
+\mathcal T_{h,k}=G_{h,k}+h\sum_{j=k}^{k+h-1}j+
+\frac{h(h+1)(2h+1)}6+\frac{k h(h+1)}2.
+\end{equation}
+For every fixed $c_0>0$, $\rho>1$, and $Z\geq0$, if $h,k\leq c_0N$, then uniformly
+for $|u|=\rho$ and $|z|\leq Z$,
+\begin{equation}\label{eq:complexQ}
+|Q_{h,k}(u,z)|\leq\exp\bigl(O_{\rho,Z,c_0}(N\log(N+1))\bigr).
+\end{equation}
+Every coefficient of $Q_{h,k}$ has degree at infinity at most zero.
+\end{proposition}
+\begin{proof}
+Put $\gamma_q=\prod_{v\geq1}(1-q^{-v})>0$. On the support of $\nu_q$,
+\[
+q^{-\sum_{j=k}^{k+h-1}j}\leq B_{h,k}(t)^{-1}
+\leq\gamma_q^{-1}q^{-\sum_{j=k}^{k+h-1}j}.
+\]
+Comparison of positive Gram forms bounds $\Delta(q,F(q))$ between the
+corresponding $h$th powers of these bounds times
+\[
+\det_{0\leq i,j<h}\frac1{q^{k+i+j+1}-1}.
+\]
+The Cauchy determinant formula factors this expression into its leading power
+\[q^{-h(h+1)(2h+1)/6-kh(h+1)/2}\]
+and products of factors $1-q^{-v}$.
+Their logarithms contribute $O_q(h)$, uniformly in $k\geq0$.
+Multiplication by $q^{-G_{h,k}}$ proves~\eqref{eq:decay}.
+
+For the remaining assertions put
+\[
+\mathcal C_{i,j}(U,X)=U^{ij}(X-S_j(U))-
+\sum_{v=1}^{i}\frac{U^{j(i-v)}}{U^v-1},\qquad
+V_{h,k}(U)=\prod_{0\leq i<j<h}(U^{k+j}-U^{k+i}).
+\]
+Partial fractions, followed by the change from the simple-pole basis to
+$1,t,\ldots,t^{h-1}$, give
+\begin{equation}\label{eq:augmented}
+\det_{0\leq i,j<h}\mathcal C_{k+i,k+j}(U,X)
+=(-1)^{\binom h2}V_{h,k}(U)\Delta_{h,k}(U,X).
+\end{equation}
+The entry $\mathcal C_{i,j}$ has degree at infinity at most $ij$. Rearrangement shows
+that the largest permutation degree in the determinant is
+$\sum_{i<h}(k+i)^2$. Subtracting
+$\deg V_{h,k}=\sum_{i<h}i(k+i)$ leaves exactly $G_{h,k}$.
+This proves the coefficientwise infinity bound.
+
+For $\rho=|u|>1$,
+\[
+|\mathcal C_{i,j}(u,z)|\leq\rho^{ij}\left(|z|+\frac{i+j}{\rho-1}\right),\qquad
+|V_{h,k}(u)|\geq\gamma_\rho^h\rho^{\sum_{i<h}i(k+i)}.
+\]
+Apply the same rearrangement to each permutation term in~\eqref{eq:augmented}
+and cancel $\rho^{G_{h,k}}$. The remaining factorial and entry factors have
+logarithm $O_{\rho,Z,c_0}(N\log(N+1))$, proving~\eqref{eq:complexQ}.
+\end{proof}
+
+\section{Local denominator bounds}\label{sec:arithmetic}
+
+Identity~\eqref{eq:augmented} shows that coefficient denominators are supported
+at $U=0$ and the cyclotomic polynomials $\Phi_n(U)$. We bound their orders
+before specializing the base.
+
+\subsection{The zero place}
+
+Work in the Laurent series field at $U=0$, and put
+\[
+P(t)=\prod_{v=k}^{k+h-1}(t-U^v),\qquad x_j=U^j.
+\]
+At a pole $x_j$, write $P_j(t)=P(t)/(t-x_j)$. The finite part of $p(t)/P(t)$ there is
+\[
+\frac{p'(x_j)}{P_j(x_j)}-
+\frac{p(x_j)P_j'(x_j)}{P_j(x_j)^2}.
+\]
+For an integer $R>k+h$, put
+\[
+Z_R=X+\sum_{v=1}^{R}\frac{U^v}{1-U^v}.
+\]
+The functional obtained by summing $-x_j$ times these finite parts for $0\leq j<R$, and subtracting
+$Z_R\sum_{k\leq j<k+h}p(x_j)/P_j(x_j)$, converges to
+$\mu_X(p/P)$. Indeed, polynomial division reduces this statement to
+\[
+-\sum_{j=0}^{R-1}U^{j(r+1)}\longrightarrow\frac1{U^{r+1}-1}
+\]
+and the simple-pole identity obtained by separating $j<v$ and $j>v$ in
+$\sum_{j<R,\,j\ne v}U^j/(U^j-U^v)$. The correction $Z_R$ gives the limit
+$S_v(U)-X$ at the pole $t=U^v$.
+
+Write this finite functional as
+$\sum_{j<R}\{W_jp(x_j)+\Gamma_jx_jp'(x_j)\}$. Its weights are
+\[
+(W_j,\Gamma_j)=
+\begin{cases}
+\displaystyle\left(-\frac{x_j}{P(x_j)},0\right),&j\notin[k,k+h),\\[1.2ex]
+\displaystyle\left(\frac{x_jP_j'(x_j)/P_j(x_j)-Z_R}{P_j(x_j)},
+-\frac1{P_j(x_j)}\right),&j\in[k,k+h).
+\end{cases}
+\]
+Since $\ord(U^j-U^v)=\min(j,v)$ for $j\ne v$, and both $Z_R$ and
+$x_jP_j'(x_j)/P_j(x_j)$ have nonnegative order, each weight has order at least
+\[
+\omega_j=j-\sum_{v=k}^{k+h-1}\min(j,v).
+\]
+The resulting finite moment matrix has entries
+$\sum_{j<R}(W_j+(k+i+r)\Gamma_j)x_j^{k+i+r}$. At each pole this is the product of the two-column block
+$\bigl(x_j^i,\,i x_j^i\bigr)$ and the two-row block
+$\bigl((W_j+(k+r)\Gamma_j)x_j^{k+r},\,\Gamma_jx_j^{k+r}\bigr)^{\mathsf T}$.
+Outside the pole window only the evaluation column remains. The sign change
+$P=(-1)^hB_{h,k}$ does not affect orders.
+
+\begin{lemma}\label{lem:zero}
+Put
+\[
+w(j,r)=(k+1)j-\sum_{v=k}^{k+h-1}\min(j,v)+2(h-1-r)j,
+\qquad 0\leq r<h.
+\]
+A lower bound for $\ord_{U=0}\Delta$ is any lower bound for $\sum_{r<h}w(j_r,r)$ over admissible selections. It is sufficient to impose the relaxed capacity conditions
+\[
+j_r\geq r\quad(r<k),\qquad
+j_r\geq k+\left\lfloor\frac{r-k}{2}\right\rfloor\quad(r\geq k).
+\]
+The same lower bound holds for every coefficient in $X$.
+\end{lemma}
+\begin{proof}
+In each finite block, Cauchy--Binet expands the determinant over distinct columns. Before the pole window there is only one slot per node; allowing two slots per node thereafter can only enlarge the set of selections. This gives the displayed inequalities. Order the selected node indices increasingly as $j_0,\ldots,j_{h-1}$. In each of the two minors, every permutation of the exponents $0,\ldots,h-1$ has cost at least $\sum_r(h-1-r)j_r$, by rearrangement. The two minors therefore contribute at least twice this sum. The shift contributes $k\sum_rj_r$, and the weight contributes the remaining terms of $w$.
+
+A sum has valuation at least the minimum valuation of its summands. The bounds therefore hold for every finite block and pass to the Laurent-series limit. To obtain coefficientwise bounds, evaluate $X$ at $h+1$ distinct rational constants, each of valuation zero, and interpolate: the inverse Vandermonde has constant entries and introduces no negative order. This gives the coefficientwise bound.
+\end{proof}
+
+\subsection{Cyclotomic places}
+
+Write $x_+=\max(x,0)$ and
+\[
+v_h(n)=\sum_{j\geq1}(h-jn)_+,\qquad
+\tau_{h,k}(n)=(k+h-\max(k,n))_+.
+\]
+The first quantity is the order of $V_{h,k}(U)$ at $\Phi_n$; the second counts
+the indices in $[k,k+h)$ that are at least $n$.
+
+\begin{lemma}\label{lem:cyclotomic}
+Every coefficient of $\Delta_{h,k}$ has cyclotomic pole order at most
+\begin{equation}\label{eq:cyclobound}
+h+v_h(n)-\max\{v_h(2n),\ h-2\tau_{h,k}(n),\ 0\}.
+\end{equation}
+\end{lemma}
+\begin{proof}
+At a primitive $n$th root $\zeta$, use the local coordinate $U=\zeta e^t$.
+The square matrix
+\[
+\mathcal M(t)=\bigl(t\mathcal C_{i,j}(U,X)\bigr)_{k\leq i,j<k+h}
+\]
+is regular at $t=0$, and~\eqref{eq:augmented} gives
+$\det\mathcal M=\pm t^hV_{h,k}\Delta_{h,k}$.
+It remains to bound the order of $\det\mathcal M$ in two ways.
+
+First,
+\[
+\frac{t\mathcal C_{i,j}(U,X)}{U^{ij}}
+=tX-\sum_{v=1}^{j}\frac{t}{U^v-1}
+-\sum_{v=1}^{i}\frac{tU^{-jv}}{U^v-1}.
+\]
+Its constant term is $-(H_{\lfloor i/n\rfloor}+H_{\lfloor j/n\rfloor})/n$,
+where $H_m=\sum_{v=1}^m1/v$.
+For each $\ell\geq1$, the coefficient of $t^\ell$ in
+$tU^{-jv}/(U^v-1)$ is, on each residue class of $v$ modulo $n$, a polynomial
+in $v$ of degree at most $\ell-1$. For $n\mid v$, expand
+$v^{-1}(vt/(e^{vt}-1))e^{-jvt}$; otherwise the denominator has nonzero
+constant term. Summation over $1\leq v\leq i$ raises the degree by at most one.
+Thus, after adding the row harmonic term, each coefficient of order $\ell$
+is polynomial in $i$ of degree at most $\ell$ on each residue class.
+Multiplication by $U^{ij}$ preserves this bound by convolution.
+
+Consequently the coefficient vectors of order $\ell$ of every column of $\mathcal M$
+lie in the span of
+\[
+i^a\mathbf1_{i\equiv v\pmod n},\quad
+H_{\lfloor i/n\rfloor}i^a\mathbf1_{i\equiv v\pmod n},
+\qquad 0\leq a\leq\ell,\quad0\leq v<n.
+\]
+These nested spaces have dimension at most $2n(\ell+1)$.
+In a nonzero term of the determinant's Taylor expansion, at most $2n\ell$
+chosen coefficient vectors can have order below $\ell$.
+Its total order is therefore at least
+$\sum_{\ell\geq1}(h-2n\ell)_+=v_h(2n)$.
+
+Second, the constant matrix has entries
+\[
+\mathcal M(0)_{i,j}=-\frac{\zeta^{ij}}n
+\left(H_{\lfloor i/n\rfloor}+H_{\lfloor j/n\rfloor}\right).
+\]
+The first summand is supported on $\tau_{h,k}(n)$ rows and the second on
+that many columns. Its rank is at most $2\tau_{h,k}(n)$, so its corank is
+at least $(h-2\tau_{h,k}(n))_+$. Constant invertible row operations make
+that many rows divisible by $t$, giving the same lower bound on $\ord\det\mathcal M$.
+Combining the two bounds and subtracting $h+v_h(n)$ proves the lemma.
+All operations retain $X$ as a polynomial parameter, so the assertion holds
+coefficientwise.
+\end{proof}
+
+\subsection{Integer descent}
+
+By~\eqref{eq:augmented}, every coefficient of $Q_{h,k}$ lies in
+\[
+\mathcal R=\Z[U^{\pm1},(U^m-1)^{-1}:m\geq1],
+\]
+since the determinant identity divides only by powers of $U$ and differences
+of powers. Let $J(U)$ be a monic integer polynomial such that every
+coefficient of $JQ_{h,k}$ has nonnegative order at $U=0$ and at each
+cyclotomic factor. These are all possible finite poles, so $JQ_{h,k}\in\Q[U,X]$.
+For a coefficient of $Q_{h,k}$ written as $A(U)/B(U)$ with $A\in\Z[U]$ and $B\in\Z[U]$
+monic, polynomiality says that $B$ divides $JA$ over $\Q[U]$.
+Gauss's lemma then gives the quotient in $\Z[U]$. Hence
+\begin{equation}\label{eq:integerpoly}
+\mathcal P(U,X)=J(U)Q_{h,k}(U,X)\in\Z[U,X],\qquad
+\deg_U\mathcal P\leq\deg J,\quad\deg_X\mathcal P\leq h.
+\end{equation}
+The first degree bound follows from Proposition~\ref{prop:analytic}.
+
+\section{The arithmetic and analytic scales}\label{sec:scales}
+
+Take $h=60N$ and $k=3N$, with $N\geq1$, and write $Q_N=Q_{60N,3N}$.
+Equations~\eqref{eq:normalization} and~\eqref{eq:T} give
+\[
+G_N=5940N^3-90N^2,\qquad \mathcal T_{60N,3N}/N^3\longrightarrow S.
+\]
+We clear the local denominators by
+\[
+J_N(U)=U^{a_N}\prod_{n\geq1}\Phi_n(U)^{c_N(n)}.
+\]
+
+For each slot $r$, the cost in Lemma~\ref{lem:zero} is minimized under its
+relaxed lower bound on $j_r$ by
+\[
+j_r=\begin{cases}r,&r<3N,\\
+\max\{\lfloor(r+3N)/2\rfloor,\,2r-60N\},&3N\leq r<60N.
+\end{cases}
+\]
+Inside the pole window, twice the cost is
+$j(j+120N-1-4r)+(3N)(3N-1)$.
+The displayed choice minimizes this integral quadratic subject to the slot bound;
+the exterior affine pieces give no smaller value. Minimizing separately in each
+slot gives a lower bound for every admissible selection.
+The three ranges are $0\leq r<3N$, $3N\leq r<41N$, and
+$41N\leq r<60N$. In the middle range write $r=3N+2t$ or $3N+2t+1$,
+so that $j_r=3N+t$ for $0\leq t<19N$. In the last range $j_r=2r-60N$.
+The standard sums of integers and squares give
+\begin{align*}
+\sum_{r=0}^{3N-1}w(j_r,r)
+ &=\frac{531}{2}N^3-90N^2+\frac12N,\\
+\sum_{r=3N}^{41N-1}w(j_r,r)
+ &=\frac{20216}{3}N^3-361N^2+\frac{19}{3}N,\\
+\sum_{r=41N}^{60N-1}w(j_r,r)
+ &=-\frac{102163}{6}N^3+361N^2+\frac{19}{6}N.
+\end{align*}
+Adding these expressions gives
+\[
+-\sum_{r<60N}w(j_r,r)=10023N^3+90N^2-10N.
+\]
+Adding $G_N$ yields the clearing exponent
+\begin{equation}\label{eq:algzero}
+a_N=15963N^3-10N.
+\end{equation}
+
+For cyclotomic places with $2n\leq h$, use the filtration term of
+Lemma~\ref{lem:cyclotomic}, giving $h+v_h(n)-v_h(2n)$.
+For $2n>h$, we have $v_h(n)=(h-n)_+$, $v_h(2n)=0$, and
+$\tau_{h,k}(n)=(63N-n)_+$, since $n>30N>k$.
+The same lemma now gives
+\[
+(h-n)_++\min\{h,2(h+k-n)_+\}.
+\]
+These two bounds are nonnegative and vanish for $n\geq63N$.
+To combine them, put
+\[
+E_h(n)=3(h-n)_+-(h-2n)_++\sum_{j\geq1}(h-(2j+1)n)_+.
+\]
+For $2n\leq h$, separating the odd terms of $v_h(n)$ shows that
+$E_h(n)=h+v_h(n)-v_h(2n)$. For $2n>h$, it reduces to $3(h-n)_+$.
+The identity $\min(h,2x_+)=2x_+-2(x-h/2)_+$ therefore gives the common formula
+\begin{equation}\label{eq:alge}
+\begin{split}
+c_N(n)=E_{60N}(n)&+2(63N-n)_+-2(33N-n)_+\\
+&-2(60N-n)_++2(30N-n)_+.
+\end{split}
+\end{equation}
+
+Let $d_N=\deg J_N=a_N+\sum_n\varphi(n)c_N(n)$ and $u_N=\sum_n c_N(n)$.
+The summatory totient estimate
+$\sum_{n\leq x}\varphi(n)\sim3x^2/\pi^2$~\cite[27.11.6]{dlmf}, by partial summation, gives
+\[
+\frac1{N^3}\sum_n\varphi(n)(KN-mn)_+
+\longrightarrow\frac{K^3}{\pi^2m^2}.
+\]
+The sums are bounded uniformly by a constant times $m^{-2}$, so this limit
+may be summed over $m$. Using
+$\sum_{j\geq1}(2j+1)^{-2}=\pi^2/8-1$, we obtain
+\[
+\frac1{N^3}\sum_n\varphi(n)E_{60N}(n)
+\longrightarrow27000+\frac{378000}{\pi^2}.
+\]
+The four translated tents contribute
+$2(63^3-33^3-60^3+30^3)/\pi^2=50220/\pi^2$.
+Together with~\eqref{eq:algzero}, this proves
+\begin{equation}\label{eq:alglimits}
+\frac{d_N}{N^3}\longrightarrow15963+27000+\frac{378000+50220}{\pi^2}=C,
+\qquad u_N=o(N^3).
+\end{equation}
+For the last assertion, use $c_N(n)\leq60N+v_{60N}(n)$ on $n<63N$ and
+$v_{60N}(n)\leq(60N)^2/(2n)$, giving $u_N=O(N^2\log(N+1))$.
+
+By~\eqref{eq:integerpoly},
+$\mathcal P_N(U,X)=J_N(U)Q_N(U,X)\in\Z[U,X]$, with degrees at most $d_N$ in
+$U$ and $60N$ in $X$. For fixed $q>1$, M\"obius inversion gives
+$\log\Phi_n(q)=\varphi(n)\log q+O_q(1)$, uniformly in $n$.
+Consequently $\log J_N(q)=d_N\log q+O_q(u_N)$, and Proposition~\ref{prop:analytic}
+gives
+\begin{equation}\label{eq:algsmall}
+\mathcal P_N(q,F(q))>0,\qquad
+\frac{\log\mathcal P_N(q,F(q))}{N^3}\longrightarrow(C-S)\log q.
+\end{equation}
+
+\section{The product-formula argument}\label{sec:algebraic}
+
+\begin{lemma}\label{lem:disk}
+For fixed $u\in\C$, $Z\geq0$, and $\epsilon>0$, eventually, uniformly for $|z|\leq Z$,
+\[
+|\mathcal P_N(u,z)|\leq
+\exp\bigl((C\log\max(1,|u|)+\epsilon)N^3\bigr).
+\]
+\end{lemma}
+\begin{proof}
+For $\rho>1$, M\"obius inversion and the power-series expansion of $\log(1-w)$ give
+\[
+\bigl|\log|\Phi_n(u)|-\varphi(n)\log\rho\bigr|\leq c_\rho
+\qquad(|u|=\rho),
+\]
+with $c_\rho$ independent of $n$ and the argument of $u$. Proposition~\ref{prop:analytic} and~\eqref{eq:alglimits} imply the bound $\exp((C\log\rho+o(1))N^3)$ on that circle. Maximum modulus extends it to $|u|\leq\rho$. Given $u$ and $\epsilon$, choose $\rho>\max(1,|u|)$ sufficiently close to that maximum, then take $N$ large. Only the cleared polynomial is evaluated inside the disk, so zero and roots of unity cause no singularity.
+\end{proof}
+
+For a number field $E$, use the unnormalized logarithmic height
+\[
+H_E(x)=\sum_{\sigma:E\hookrightarrow\C}\log\max(1,|\sigma(x)|)
++\sum_{v\ \text{finite}}\log\max(1,|x|_v),
+\]
+where finite-place absolute values include the local degrees, so the product formula has no additional weights. Complex embeddings are counted individually.
+
+\begin{proposition}\label{prop:height}
+If a real number field $E$ contains both $q>1$ and $F(q)$, then
+\[
+S\log q\leq CH_E(q).
+\]
+\end{proposition}
+\begin{proof}
+Put $\alpha=F(q)$ and $x_N=\mathcal P_N(q,\alpha)\ne0$. At each finite place, integrality of the polynomial coefficients gives
+\[
+\log|x_N|_v\leq d_N\log\max(1,|q|_v)
++60N\log\max(1,|\alpha|_v).
+\]
+The total $\alpha$ contribution is $O(N)$. At the distinguished real embedding use~\eqref{eq:algsmall}; at every other embedding use Lemma~\ref{lem:disk}. Sum the estimates, divide by $N^3$, and apply the product formula. Since the number of embeddings is fixed, their $\epsilon$ errors can be sent to zero, giving
+$0\leq CH_E(q)-S\log q$.
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:algebraic}]
+The case $e=0$ is immediate. If a nonzero polynomial of degree at most $e\geq1$ over $K=\Q(q)$ vanished at $\alpha=F(q)$, then $E=K(\alpha)$ would have relative degree $r\leq e$. The height--Mahler identity~\cite[Proposition~1.6.6]{bombieri-gubler} and the tower formula give
+\[
+H_E(q)=r\log M(q).
+\]
+Proposition~\ref{prop:height} would imply
+$S\log q\leq rC\log M(q)$, contradicting~\eqref{eq:algmargin}. For nonintegral bases, the finite-place contribution is accounted for by the leading coefficient in $M(q)$.
+\end{proof}
+
+\begin{remark}
+Transporting the local bounds through six exact bordered presentations of the
+same determinant improves the rational-base irrationality threshold to
+$0.573290$; this refinement is formalized in the accompanying Lean development.
+Numerical parameter searches suggest that this family of estimates saturates
+near that value.
+\end{remark}
+
+\begin{thebibliography}{9}
+\bibitem{erdos1948}
+P.~Erd\H{o}s, \emph{On arithmetical properties of Lambert series},
+Journal of the Indian Mathematical Society (N.S.) \textbf{12} (1948), 63--66.
+\url{https://users.renyi.hu/~p_erdos/1948-04.pdf}.
+\bibitem{erdos}
+P.~Erd\H{o}s, \emph{On the irrationality of certain series: problems and results},
+in A.~Baker (ed.), New Advances in Transcendence Theory,
+Cambridge University Press, Cambridge, 1988, pp.~102--109.
+\url{https://doi.org/10.1017/CBO9780511897184.009}.
+\bibitem{bundschuh-vaananen}
+P.~Bundschuh and K.~V\"a\"an\"anen, \emph{Arithmetical investigations of a certain infinite product},
+Compositio Mathematica \textbf{91} (1994), no.~2, 175--199.
+\url{https://www.numdam.org/item/CM_1994__91_2_175_0/}.
+\bibitem{zudilin}
+W.~Zudilin, \emph{Heine's basic transform and a permutation group for $q$-harmonic series},
+Acta Arithmetica \textbf{111} (2004), no.~2, 153--164.
+\url{https://doi.org/10.4064/aa111-2-4}.
+\bibitem{cook}
+W.~Cook, \emph{Geometric Moments and Rational Lambert Values: Proofs and Further Results},
+online manuscript, September 2026.
+\href{https://wcook04.github.io/plectis/maths/papers/erdos1049-rational-base-lambert-reasoning-surface.html}{Manuscript and source}, accessed 7 October 2026.
+\bibitem{fauzan}
+A.~Fauzan, \emph{$\zeta(5)$ is irrational}, preprint, 17 September 2026.
+\url{https://doi.org/10.5281/zenodo.22826419}.
+\bibitem{bombieri-gubler}
+E.~Bombieri and W.~Gubler, \emph{Heights in Diophantine Geometry},
+New Mathematical Monographs \textbf{4}, Cambridge University Press, 2006,
+Proposition~1.6.6.
+\url{https://doi.org/10.1017/CBO9780511542879}.
+\bibitem{dlmf}
+NIST Digital Library of Mathematical Functions, \S27.11, equation~27.11.6.
+\url{https://dlmf.nist.gov/27.11.E6}.
+\end{thebibliography}
+\end{document}

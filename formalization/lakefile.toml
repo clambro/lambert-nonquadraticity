@@ -1,0 +1,15 @@
+name = "lambert_irrationality"
+version = "0.1.0"
+defaultTargets = ["Lambert"]
+
+[leanOptions]
+autoImplicit = false
+warningAsError = true
+
+[[lean_lib]]
+name = "Lambert"
+
+[[require]]
+name = "mathlib"
+git = "https://github.com/leanprover-community/mathlib4.git"
+rev = "v4.33.1"

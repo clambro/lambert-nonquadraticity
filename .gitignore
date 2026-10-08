@@ -1,0 +1,25 @@
+# Lean dependencies and compiled output
+**/.lake/
+
+# Python bytecode and test caches
+**/__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# LaTeX intermediates (the publication PDF is tracked)
+*.aux
+*.log
+*.out
+*.toc
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+
+# Local editor, agent, and machine settings
+.agents/
+.aws/
+.codex/
+.vscode/
+.idea/
+.DS_Store
+*~
